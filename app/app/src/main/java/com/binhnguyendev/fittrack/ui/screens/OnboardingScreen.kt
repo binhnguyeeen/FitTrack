@@ -46,7 +46,7 @@ import coil.compose.AsyncImage
 import com.binhnguyendev.fittrack.ui.components.FtPrimaryButton
 import com.binhnguyendev.fittrack.ui.components.FtText
 import com.binhnguyendev.fittrack.ui.components.FtUnderlineInput
-import com.binhnguyendev.fittrack.ui.components.avatarModel
+import com.binhnguyendev.fittrack.ui.components.AvatarPicker
 import com.binhnguyendev.fittrack.ui.components.ftClick
 import com.binhnguyendev.fittrack.ui.components.pressScale
 import com.binhnguyendev.fittrack.ui.nav.rippleAnchor
@@ -230,43 +230,4 @@ private fun Heading(prefix: String, emphasis: String, emphasisFamily: androidx.c
         color = FT.text,
         lineHeight = 48.sp,
     )
-}
-
-@Composable
-private fun AvatarPicker(pic: String?, onPick: () -> Unit) {
-    Box(
-        Modifier
-            .size(120.dp)
-            .pressScale(0.97f)
-            .clip(CircleShape)
-            .background(if (pic != null) FT.black else androidx.compose.ui.graphics.Color.Transparent)
-            .then(
-                if (pic == null) {
-                    Modifier.drawBehind {
-                        drawCircle(
-                            color = FT.orangeA40,
-                            style = Stroke(
-                                width = 1.dp.toPx(),
-                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f), 0f),
-                            ),
-                        )
-                    }
-                } else {
-                    Modifier.border(1.dp, FT.whiteA10, CircleShape)
-                },
-            )
-            .ftClick(onPick),
-        contentAlignment = Alignment.Center,
-    ) {
-        if (pic != null) {
-            AsyncImage(
-                model = avatarModel(pic),
-                contentDescription = "Profile photo",
-                modifier = Modifier.size(120.dp).clip(CircleShape),
-                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-            )
-        } else {
-            FtIcon("camera", size = 20.dp, color = FT.orange, strokeWidth = 1.6f)
-        }
-    }
 }

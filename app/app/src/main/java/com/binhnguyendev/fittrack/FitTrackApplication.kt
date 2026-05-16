@@ -13,6 +13,6 @@ class FitTrackApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         AppFonts.init(assets)
-        repositories = Repositories(FitTrackDatabase.get(this))
+        repositories = Repositories(FitTrackDatabase.get(this), this)
     }
 }

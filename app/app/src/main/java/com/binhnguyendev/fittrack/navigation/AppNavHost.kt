@@ -8,14 +8,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import com.binhnguyendev.fittrack.ui.nav.LocalProfileMenu
 import com.binhnguyendev.fittrack.ui.nav.LocalRipple
 import com.binhnguyendev.fittrack.ui.screens.AddExerciseScreen
 import com.binhnguyendev.fittrack.ui.screens.CalendarScreen
 import com.binhnguyendev.fittrack.ui.screens.CreateTemplateScreen
+import com.binhnguyendev.fittrack.ui.screens.EditProfileScreen
 import com.binhnguyendev.fittrack.ui.screens.HomeScreen
 import com.binhnguyendev.fittrack.ui.screens.LogWorkoutScreen
 import com.binhnguyendev.fittrack.ui.screens.OnboardingScreen
-import com.binhnguyendev.fittrack.ui.screens.PlaceholderScreen
+import com.binhnguyendev.fittrack.ui.screens.SettingsScreen
+import com.binhnguyendev.fittrack.ui.screens.StatsScreen
 import com.binhnguyendev.fittrack.ui.screens.SummaryScreen
 import com.binhnguyendev.fittrack.ui.screens.TemplatesScreen
 import com.binhnguyendev.fittrack.ui.vm.CreateTemplateViewModel
@@ -30,6 +33,7 @@ fun AppNavHost(
     startDestination: String,
 ) {
     val ripple = LocalRipple.current
+    val profileMenu = LocalProfileMenu.current
 
     NavHost(
         navController = navController,
@@ -50,7 +54,7 @@ fun AppNavHost(
         }
         composable(Routes.HOME) {
             HomeScreen(
-                onOpenProfile = { /* ProfileMenu wired in Milestone 6 */ },
+                onOpenProfile = { profileMenu.show() },
                 onStartWorkout = { kind, templateId, center ->
                     ripple.launch(center) {
                         navController.navigate(Routes.workout(kind, templateId))
@@ -135,8 +139,15 @@ fun AppNavHost(
                 },
             )
         }
-        composable(Routes.STATS) { PlaceholderScreen("Stats") }
-        composable(Routes.SETTINGS) { PlaceholderScreen("Settings") }
-        composable(Routes.EDIT_PROFILE) { PlaceholderScreen("Edit profile") }
+        composable(Routes.STATS) { StatsScreen() }
+        composable(Routes.SETTINGS) {
+            SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onEditProfile = { navController.navigate(Routes.EDIT_PROFILE) },
+            )
+        }
+        composable(Routes.EDIT_PROFILE) {
+            EditProfileScreen(onBack = { navController.popBackStack() })
+        }
     }
 }

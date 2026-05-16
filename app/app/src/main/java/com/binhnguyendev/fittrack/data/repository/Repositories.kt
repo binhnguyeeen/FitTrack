@@ -1,9 +1,11 @@
 package com.binhnguyendev.fittrack.data.repository
 
+import android.content.Context
 import com.binhnguyendev.fittrack.data.db.FitTrackDatabase
 
 /** Manually-wired repository graph (no DI framework, per spec STEP 8). */
-class Repositories(db: FitTrackDatabase) {
+class Repositories(db: FitTrackDatabase, context: Context) {
+    val prefs = PreferencesRepository(context)
     val user = UserRepository(db.userProfileDao())
     val workout = WorkoutRepository(
         db.workoutSessionDao(),

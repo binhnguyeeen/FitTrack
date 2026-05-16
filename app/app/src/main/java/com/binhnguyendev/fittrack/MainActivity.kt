@@ -29,9 +29,12 @@ import com.binhnguyendev.fittrack.navigation.AppNavHost
 import com.binhnguyendev.fittrack.navigation.Routes
 import com.binhnguyendev.fittrack.ui.LocalRepositories
 import com.binhnguyendev.fittrack.ui.components.TabBar
+import com.binhnguyendev.fittrack.ui.nav.LocalProfileMenu
 import com.binhnguyendev.fittrack.ui.nav.LocalRipple
+import com.binhnguyendev.fittrack.ui.nav.ProfileMenuController
 import com.binhnguyendev.fittrack.ui.nav.RippleController
 import com.binhnguyendev.fittrack.ui.nav.RippleHost
+import com.binhnguyendev.fittrack.ui.screens.ProfileMenuOverlay
 import com.binhnguyendev.fittrack.ui.theme.FT
 import com.binhnguyendev.fittrack.ui.theme.FitTrackTheme
 
@@ -57,6 +60,7 @@ class MainActivity : ComponentActivity() {
 private fun FitTrackRoot() {
     val repositories = LocalRepositories.current
     val ripple = remember { RippleController() }
+    val profileMenu = remember { ProfileMenuController() }
     val navController = rememberNavController()
 
     var startDestination by remember { mutableStateOf<String?>(null) }
@@ -71,7 +75,10 @@ private fun FitTrackRoot() {
             .background(FT.bg),
     ) {
         val start = startDestination ?: return@Box
-        CompositionLocalProvider(LocalRipple provides ripple) {
+        CompositionLocalProvider(
+            LocalRipple provides ripple,
+            LocalProfileMenu provides profileMenu,
+        ) {
             AppNavHost(navController = navController, startDestination = start)
 
             val currentRoute by navController.currentBackStackEntryAsState()
@@ -102,6 +109,20 @@ private fun FitTrackRoot() {
                     }
                 }
             }
+
+            // Profile menu sheet (opened from the Home avatar).
+            ProfileMenuOverlay(
+                visible = profileMenu.open,
+                onDismiss = { profileMenu.dismiss() },
+                onEditProfile = {
+                    profileMenu.dismiss()
+                    navController.navigate(Routes.EDIT_PROFILE)
+                },
+                onOpenSettings = {
+                    profileMenu.dismiss()
+                    navController.navigate(Routes.SETTINGS)
+                },
+            )
 
             // Ripple overlay sits above everything (system-level layer).
             RippleHost(ripple)
