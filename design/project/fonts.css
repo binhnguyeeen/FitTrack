@@ -1,0 +1,15 @@
+/* Tiempos — Text (body/ui), Headline (display), Fine (large display) */
+@font-face { font-family: 'Tiempos Text';     src: url('fonts/TiemposText-Regular.otf') format('opentype');     font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Text';     src: url('fonts/TiemposText-Medium.otf') format('opentype');      font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Text';     src: url('fonts/TiemposText-Semibold.otf') format('opentype');    font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Text';     src: url('fonts/TiemposText-Bold.otf') format('opentype');        font-weight: 700; font-style: normal; font-display: swap; }
+
+@font-face { font-family: 'Tiempos Headline'; src: url('fonts/TiemposHeadline-Regular.otf') format('opentype');  font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Headline'; src: url('fonts/TiemposHeadline-Medium.otf') format('opentype');   font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Headline'; src: url('fonts/TiemposHeadline-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Headline'; src: url('fonts/TiemposHeadline-Bold.otf') format('opentype');     font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Headline'; src: url('fonts/TiemposHeadline-Black.otf') format('opentype');    font-weight: 900; font-style: normal; font-display: swap; }
+
+@font-face { font-family: 'Tiempos Fine';     src: url('fonts/TiemposFine-Regular.otf') format('opentype');      font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Fine';     src: url('fonts/TiemposFine-Medium.otf') format('opentype');       font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Tiempos Fine';     src: url('fonts/TiemposFine-Bold.otf') format('opentype');         font-weight: 700; font-style: normal; font-display: swap; }

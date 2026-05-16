@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>FitTrack — Android Prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="fonts.css" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0F0F11; overflow: hidden; }
+  body { font-family: 'Tiempos Text', Georgia, serif; color: #FFFFFF; }
+  * { box-sizing: border-box; }
+  button, input, textarea, select { font-family: 'Tiempos Text', Georgia, serif; font-weight: 400; }
+  button { -webkit-tap-highlight-color: transparent; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="fittrack-frame.jsx"></script>
+<script type="text/babel" src="fittrack-screens-1.jsx"></script>
+<script type="text/babel" src="fittrack-screens-2.jsx"></script>
+<script type="text/babel" src="fittrack-screens-3.jsx"></script>
+<script type="text/babel" src="fittrack-app.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+const PHONE_W = 360;
+const PHONE_H = 780;
+
+// Tweaks context — onboarding screens read these to toggle bold emphasis +
+// the "You can always change this in Settings." subtitle.
+const FTTweaksContext = React.createContext({});
+window.useFTTweaks = () => React.useContext(FTTweaksContext);
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "boldEmphasis": true,
+  "showSettingsHint": true
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  return (
+    <FTTweaksContext.Provider value={t}>
+    <DesignCanvas>
+
+      <DCSection id="prototype" title="Interactive Prototype" subtitle="Click around — bottom nav, start workout, plus button, settings">
+        <DCArtboard id="live" label="Live · Try it" width={PHONE_W} height={PHONE_H}>
+          <FitTrackApp initial="home" />
+        </DCArtboard>
+        <DCArtboard id="onboard-flow" label="Onboarding flow" width={PHONE_W} height={PHONE_H}>
+          <FitTrackApp initial="onboarding" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="onboarding" title="Onboarding" subtitle="2-step: name then profile picture">
+        <DCArtboard id="name" label="Step 1 · What's your name?" width={PHONE_W} height={PHONE_H}>
+          <AB.Onboarding />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="home" title="Home" subtitle="Time-of-day greeting · streak · today's plan · quick start">
+        <DCArtboard id="default" label="Default · monogram avatar" width={PHONE_W} height={PHONE_H}>
+          <AB.Home />
+        </DCArtboard>
+        <DCArtboard id="photo" label="With profile photo" width={PHONE_W} height={PHONE_H}>
+          <AB.HomePhoto />
+        </DCArtboard>
+        <DCArtboard id="profile-menu" label="Profile menu open" width={PHONE_W} height={PHONE_H}>
+          <AB.ProfileMenuOpen />
+        </DCArtboard>
+        <DCArtboard id="edit-profile" label="Edit profile" width={PHONE_W} height={PHONE_H}>
+          <AB.EditProfile />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="calendar" title="Calendar" subtitle="Week strip · day detail · plan workout flow">
+        <DCArtboard id="default" label="Today selected" width={PHONE_W} height={PHONE_H}>
+          <AB.Calendar />
+        </DCArtboard>
+        <DCArtboard id="planning" label="Plan workout · time picker" width={PHONE_W} height={PHONE_H}>
+          <AB.CalendarPlanning />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="templates" title="Templates" subtitle="List → create flow → exercise picker">
+        <DCArtboard id="list" label="Saved templates" width={PHONE_W} height={PHONE_H}>
+          <AB.Templates />
+        </DCArtboard>
+        <DCArtboard id="create" label="Create template" width={PHONE_W} height={PHONE_H}>
+          <AB.CreateTemplate />
+        </DCArtboard>
+        <DCArtboard id="add-exercise" label="Add exercise · Preset" width={PHONE_W} height={PHONE_H}>
+          <AB.AddExercise />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="workout" title="Log Workout" subtitle="Free-range cardio: time → distance → auto calories">
+        <DCArtboard id="swim" label="Swim · tracking time" width={PHONE_W} height={PHONE_H}>
+          <AB.Workout />
+        </DCArtboard>
+        <DCArtboard id="swim-done" label="Swim · enter distance" width={PHONE_W} height={PHONE_H}>
+          <AB.WorkoutSwimDone />
+        </DCArtboard>
+        <DCArtboard id="treadmill" label="Treadmill · tracking time" width={PHONE_W} height={PHONE_H}>
+          <AB.WorkoutTreadmill />
+        </DCArtboard>
+        <DCArtboard id="treadmill-done" label="Treadmill · enter distance" width={PHONE_W} height={PHONE_H}>
+          <AB.WorkoutTreadmillDone />
+        </DCArtboard>
+        <DCArtboard id="basket" label="Basketball · tracking time" width={PHONE_W} height={PHONE_H}>
+          <AB.WorkoutBasket />
+        </DCArtboard>
+        <DCArtboard id="basket-done" label="Basketball · enter distance" width={PHONE_W} height={PHONE_H}>
+          <AB.WorkoutBasketDone />
+        </DCArtboard>
+        <DCArtboard id="pb" label="Personal best banner" width={PHONE_W} height={PHONE_H}>
+          <AB.WorkoutPB />
+        </DCArtboard>
+        <DCArtboard id="rest" label="Rest timer active" width={PHONE_W} height={PHONE_H}>
+          <AB.WorkoutRest />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="summary" title="Post-Workout Summary" subtitle="Stats · personal best · notes">
+        <DCArtboard id="default" label="Workout complete" width={PHONE_W} height={PHONE_H}>
+          <AB.Summary />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="stats" title="History & Stats" subtitle="Heatmap · trends · personal bests · sessions">
+        <DCArtboard id="line" label="Line chart · duration trends" width={PHONE_W} height={PHONE_H}>
+          <AB.Stats />
+        </DCArtboard>
+        <DCArtboard id="bar" label="Bar chart · weekly volume" width={PHONE_W} height={PHONE_H}>
+          <AB.StatsBar />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="settings" title="Settings" subtitle="Units · reminders · notifications · export">
+        <DCArtboard id="default" label="Settings list" width={PHONE_W} height={PHONE_H}>
+          <AB.Settings />
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+    <TweaksPanel title="Tweaks">
+      <TweakSection label="Onboarding">
+        <TweakToggle label="Bold key words"
+                     value={t.boldEmphasis}
+                     onChange={(v) => setTweak('boldEmphasis', v)} />
+        <TweakToggle label='"You can change this" hint'
+                     value={t.showSettingsHint}
+                     onChange={(v) => setTweak('showSettingsHint', v)} />
+      </TweakSection>
+    </TweaksPanel>
+    </FTTweaksContext.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
