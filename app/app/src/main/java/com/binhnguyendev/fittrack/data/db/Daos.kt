@@ -20,6 +20,11 @@ interface UserProfileDao {
     suspend fun getOnce(): UserProfile?
 }
 
+data class TemplateListItem(
+    @androidx.room.Embedded val template: WorkoutTemplate,
+    val exerciseCount: Int,
+)
+
 @Dao
 interface WorkoutTemplateDao {
     @Insert
@@ -33,6 +38,17 @@ interface WorkoutTemplateDao {
 
     @Query("SELECT * FROM workout_template ORDER BY createdAt DESC")
     fun getAll(): Flow<List<WorkoutTemplate>>
+
+    @Query(
+        """
+        SELECT wt.*, (
+            SELECT COUNT(*) FROM template_exercise te WHERE te.templateId = wt.id
+        ) AS exerciseCount
+        FROM workout_template wt
+        ORDER BY wt.createdAt DESC
+        """,
+    )
+    fun getAllWithCount(): Flow<List<TemplateListItem>>
 
     @Query("SELECT * FROM workout_template WHERE id = :id LIMIT 1")
     suspend fun getById(id: Long): WorkoutTemplate?

@@ -5,6 +5,7 @@ object Routes {
     const val HOME = "home"
     const val CALENDAR = "calendar"
     const val TEMPLATES = "templates"
+    const val TEMPLATES_FLOW = "templates/flow"
     const val TEMPLATES_CREATE = "templates/create"
     const val TEMPLATES_ADD = "templates/add"
     const val WORKOUT = "workout/{kind}/{templateId}"

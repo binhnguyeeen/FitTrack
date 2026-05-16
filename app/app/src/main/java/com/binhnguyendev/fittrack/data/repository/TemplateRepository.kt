@@ -3,6 +3,7 @@ package com.binhnguyendev.fittrack.data.repository
 import com.binhnguyendev.fittrack.data.db.ActivityKind
 import com.binhnguyendev.fittrack.data.db.TemplateExercise
 import com.binhnguyendev.fittrack.data.db.TemplateExerciseDao
+import com.binhnguyendev.fittrack.data.db.TemplateListItem
 import com.binhnguyendev.fittrack.data.db.WorkoutTemplate
 import com.binhnguyendev.fittrack.data.db.WorkoutTemplateDao
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ class TemplateRepository(
     private val exerciseDao: TemplateExerciseDao,
 ) {
     val allTemplates: Flow<List<WorkoutTemplate>> = templateDao.getAll()
+    val templatesWithCount: Flow<List<TemplateListItem>> = templateDao.getAllWithCount()
 
     fun exerciseCount(templateId: Long): Flow<Int> = exerciseDao.countForTemplate(templateId)
 
