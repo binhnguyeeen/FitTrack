@@ -13,11 +13,16 @@ import com.binhnguyendev.fittrack.ui.screens.AddExerciseScreen
 import com.binhnguyendev.fittrack.ui.screens.CalendarScreen
 import com.binhnguyendev.fittrack.ui.screens.CreateTemplateScreen
 import com.binhnguyendev.fittrack.ui.screens.HomeScreen
+import com.binhnguyendev.fittrack.ui.screens.LogWorkoutScreen
 import com.binhnguyendev.fittrack.ui.screens.OnboardingScreen
 import com.binhnguyendev.fittrack.ui.screens.PlaceholderScreen
+import com.binhnguyendev.fittrack.ui.screens.SummaryScreen
 import com.binhnguyendev.fittrack.ui.screens.TemplatesScreen
 import com.binhnguyendev.fittrack.ui.vm.CreateTemplateViewModel
+import com.binhnguyendev.fittrack.ui.vm.SummaryViewModel
+import com.binhnguyendev.fittrack.ui.vm.WorkoutViewModel
 import com.binhnguyendev.fittrack.ui.vm.ftScopedViewModel
+import com.binhnguyendev.fittrack.ui.vm.ftViewModel
 
 @Composable
 fun AppNavHost(
@@ -93,11 +98,43 @@ fun AppNavHost(
                 navArgument("kind") { type = NavType.StringType },
                 navArgument("templateId") { type = NavType.LongType },
             ),
-        ) { PlaceholderScreen("Workout") }
+        ) { entry ->
+            val kind = entry.arguments?.getString("kind") ?: "routine"
+            val templateId = entry.arguments?.getLong("templateId") ?: -1L
+            val vm = ftViewModel(key = "workout/$kind/$templateId") { repos ->
+                WorkoutViewModel(repos, kind, templateId)
+            }
+            LogWorkoutScreen(
+                vm = vm,
+                onFinished = { sessionId, center ->
+                    ripple.launch(center) {
+                        navController.navigate(Routes.summary(sessionId)) {
+                            popUpTo(Routes.WORKOUT) { inclusive = true }
+                        }
+                    }
+                },
+            )
+        }
         composable(
             Routes.SUMMARY,
             arguments = listOf(navArgument("sessionId") { type = NavType.LongType }),
-        ) { PlaceholderScreen("Summary") }
+        ) { entry ->
+            val sessionId = entry.arguments?.getLong("sessionId") ?: -1L
+            val vm = ftViewModel(key = "summary/$sessionId") { repos ->
+                SummaryViewModel(repos, sessionId)
+            }
+            SummaryScreen(
+                vm = vm,
+                onDone = { center ->
+                    ripple.launch(center) {
+                        navController.navigate(Routes.HOME) {
+                            popUpTo(Routes.HOME) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+                },
+            )
+        }
         composable(Routes.STATS) { PlaceholderScreen("Stats") }
         composable(Routes.SETTINGS) { PlaceholderScreen("Settings") }
         composable(Routes.EDIT_PROFILE) { PlaceholderScreen("Edit profile") }

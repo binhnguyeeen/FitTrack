@@ -30,6 +30,9 @@ class WorkoutRepository(
     suspend fun getSets(sessionId: Long): List<WorkoutSet> =
         withContext(Dispatchers.IO) { setDao.getBySessionId(sessionId) }
 
+    suspend fun bestFor(exerciseName: String): PersonalBest? =
+        withContext(Dispatchers.IO) { pbDao.get(exerciseName) }
+
     suspend fun updateNotes(sessionId: Long, notes: String) =
         withContext(Dispatchers.IO) { sessionDao.updateNotes(sessionId, notes) }
 
