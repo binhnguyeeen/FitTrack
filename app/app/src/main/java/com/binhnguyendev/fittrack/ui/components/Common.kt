@@ -405,7 +405,7 @@ fun Avatar(
     ) {
         if (photoUri != null) {
             AsyncImage(
-                model = photoUri,
+                model = avatarModel(photoUri),
                 contentDescription = name,
                 modifier = Modifier
                     .size(size)
@@ -424,6 +424,11 @@ fun Avatar(
         }
     }
 }
+
+/** Stored avatar paths are app-internal files; bare content/URL strings pass
+ *  through. Coil needs a File for plain filesystem paths. */
+fun avatarModel(photoUri: String): Any =
+    if (photoUri.startsWith("/")) java.io.File(photoUri) else photoUri
 
 // ── Time-of-day helpers ────────────────────────────────────────────────────
 fun greeting(): String {

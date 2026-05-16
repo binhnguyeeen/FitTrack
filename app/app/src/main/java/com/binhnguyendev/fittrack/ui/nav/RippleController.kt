@@ -15,6 +15,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import com.binhnguyendev.fittrack.ui.theme.FT
 import com.binhnguyendev.fittrack.ui.theme.FT_EASE_RIPPLE
@@ -48,6 +50,11 @@ data class RippleRequest(
 )
 
 val LocalRipple = staticCompositionLocalOf { RippleController() }
+
+/** Reports this element's centre in root pixel coordinates — used as the
+ *  ripple origin for the tapped button. */
+fun Modifier.rippleAnchor(onCenter: (Offset) -> Unit): Modifier =
+    this.onGloballyPositioned { onCenter(it.boundsInRoot().center) }
 
 @Composable
 fun RippleHost(controller: RippleController, modifier: Modifier = Modifier) {

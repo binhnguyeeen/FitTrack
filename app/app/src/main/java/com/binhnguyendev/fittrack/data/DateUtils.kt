@@ -1,6 +1,7 @@
 package com.binhnguyendev.fittrack.data
 
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 
@@ -12,6 +13,12 @@ object DateUtils {
             .toEpochMilli()
 
     fun todayUtc(): Long = startOfDayUtc(System.currentTimeMillis())
+
+    fun utcMillis(date: LocalDate): Long =
+        date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+
+    fun toLocalDate(utcMillis: Long): LocalDate =
+        Instant.ofEpochMilli(utcMillis).atZone(ZoneOffset.UTC).toLocalDate()
 
     /** Whole days between two normalized dates (later - earlier). */
     fun daysBetween(fromUtc: Long, toUtc: Long): Long =

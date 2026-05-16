@@ -6,18 +6,23 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.binhnguyendev.fittrack.ui.nav.LocalRipple
+import com.binhnguyendev.fittrack.ui.screens.CalendarScreen
+import com.binhnguyendev.fittrack.ui.screens.HomeScreen
+import com.binhnguyendev.fittrack.ui.screens.OnboardingScreen
 import com.binhnguyendev.fittrack.ui.screens.PlaceholderScreen
 
 /**
- * Single NavHost hosting every route. Milestone 2 wires the skeleton with
- * placeholders + the prototype's transition system; later milestones swap in
- * the real screens.
+ * Single NavHost hosting every route. Milestone 3 wires Onboarding/Home/
+ * Calendar; remaining routes stay placeholders until their milestones.
  */
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     startDestination: String,
 ) {
+    val ripple = LocalRipple.current
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -26,9 +31,26 @@ fun AppNavHost(
         popEnterTransition = { ftPopEnter() },
         popExitTransition = { ftPopExit() },
     ) {
-        composable(Routes.ONBOARDING) { PlaceholderScreen("Onboarding") }
-        composable(Routes.HOME) { PlaceholderScreen("Home") }
-        composable(Routes.CALENDAR) { PlaceholderScreen("Calendar") }
+        composable(Routes.ONBOARDING) {
+            OnboardingScreen(onComplete = { center ->
+                ripple.launch(center) {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.ONBOARDING) { inclusive = true }
+                    }
+                }
+            })
+        }
+        composable(Routes.HOME) {
+            HomeScreen(
+                onOpenProfile = { /* ProfileMenu wired in Milestone 6 */ },
+                onStartWorkout = { kind, templateId, center ->
+                    ripple.launch(center) {
+                        navController.navigate(Routes.workout(kind, templateId))
+                    }
+                },
+            )
+        }
+        composable(Routes.CALENDAR) { CalendarScreen() }
         composable(Routes.TEMPLATES) { PlaceholderScreen("Templates") }
         composable(Routes.TEMPLATES_CREATE) { PlaceholderScreen("Create template") }
         composable(Routes.TEMPLATES_ADD) { PlaceholderScreen("Add exercise") }
